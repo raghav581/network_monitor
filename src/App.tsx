@@ -59,7 +59,10 @@ function App() {
   }, [])
 
   useEffect(() => {
-    void runScan()
+    const id = window.setTimeout(() => {
+      void runScan()
+    }, 0)
+    return () => window.clearTimeout(id)
   }, [runScan])
 
   useEffect(() => {

@@ -66,7 +66,7 @@ export const NETWORK_TESTS: NetworkTest[] = [
     layer: 5,
     layerName: 'Internet',
     title: 'Internet connectivity',
-    description: 'HTTP checks to multiple independent endpoints (Google, Cloudflare).',
+    description: 'HTTP checks to multiple independent Cloudflare-backed endpoints.',
   },
   {
     id: 'tls',
@@ -218,8 +218,8 @@ export async function runAllTests(ctx: RunContext): Promise<Map<string, TestResu
   // Internet — multiple endpoints
   markRunning('internet')
   const endpoints = [
-    { name: 'Google', url: 'https://www.google.com/generate_204' },
     { name: 'Cloudflare', url: 'https://cloudflare.com/cdn-cgi/trace' },
+    { name: 'Cloudflare (1.1.1.1)', url: 'https://1.1.1.1/cdn-cgi/trace' },
   ]
   const internetResults = await Promise.all(
     endpoints.map(async (ep) => {
@@ -245,7 +245,7 @@ export async function runAllTests(ctx: RunContext): Promise<Map<string, TestResu
 
   // TLS
   markRunning('tls')
-  const tls = await timedFetch('https://www.cloudflare.com')
+  const tls = await timedFetch('https://cloudflare.com/cdn-cgi/trace')
   set('tls', {
     id: 'tls',
     status: tls.ok ? 'pass' : 'fail',
